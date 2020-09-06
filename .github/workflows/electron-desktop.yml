@@ -80,7 +80,7 @@ jobs:
 
     - name: Zip Build
       id: zip_build
-      run: Compress-Archive -LiteralPath dist/WowUp.Updater.exe -DestinationPath WowUpUpdater.zip
+      run: Compress-Archive -LiteralPath dist/WowUpUpdater.exe -DestinationPath WowUpUpdater.zip
       
     - name: Create Release
       id: create_release
