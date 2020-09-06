@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using WowUp.Updater.Models;
 using WowUp.Updater.Utilities;
+using System.IO.Compression;
 
 namespace WowUp.Updater
 {
@@ -140,6 +141,5 @@ namespace WowUp.Updater
 
             return Path.Combine(dirName, backupName);
         }
-
     }
 }

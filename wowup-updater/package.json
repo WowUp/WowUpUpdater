@@ -1,0 +1,41 @@
+{
+  "name": "wowup-updater",
+  "version": "1.0.0",
+  "description": "WowUp app updater",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win portable",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": "https://github.com/jliddev/WowUpUpdater",
+  "keywords": [
+    "wow",
+    "wowup",
+    "world of warcraft",
+    "updater"
+  ],
+  "author": "jliddev",
+  "license": "ISC",
+  "build": {
+    "appId": "wowup.io",
+    "productName": "WowUpUpdater",
+    "win": {
+      "artifactName": "${productName}.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^10.1.1",
+    "electron-builder": "^22.8.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.16",
+    "commander": "^6.1.0",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2",
+    "taskkill": "^3.1.0",
+    "uuid": "^8.3.0",
+    "winston": "^3.3.3"
+  }
+}

@@ -13,11 +13,7 @@ namespace WowUp.Updater.Utilities
 
             Directory.CreateDirectory(tempZipDirectory);
 
-            using (var fileStream = File.OpenRead(inputFilePath))
-            {
-                var archive = new ZipArchive(fileStream);
-                archive.ExtractToDirectory(tempZipDirectory);
-            }
+            ZipFile.ExtractToDirectory(inputFilePath, tempZipDirectory);
 
             if (!Directory.Exists(tempZipDirectory))
             {

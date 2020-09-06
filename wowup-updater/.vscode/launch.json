@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "env": {
+        "APP_STAGE": "dev"
+      },
+      "args": [
+        ".",
+        "-o",
+        "D:\\git\\Unfurler.Api.Serverless\\WowUp\\WowUp.WPF\\bin\\Release\\Publish\\WowUp.exe",
+        "-u",
+         "C:\\Users\\trade\\AppData\\Local\\WowUp\\Downloads\\WowUp.zip"
+      ],
+      "outputCapture": "std"
+    }
+  ]
+}
