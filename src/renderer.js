@@ -3,24 +3,43 @@ const fs = require('fs');
 const path = require('path');
 const AdmZip = require('adm-zip');
 const { program } = require('commander');
-const taskKill = require('taskkill');
 const { v4: uuidv4 } = require('uuid');
 const rimraf = require('rimraf');
 const { spawn } = require('child_process');
 const winston = require('winston');
+const shell = require('node-powershell');
+const { version } = require('../package.json');
 
 const WOWUP_FOLDER = path.join(remote.process.env.LOCALAPPDATA, 'WowUp', 'Logs');
+
+const errorStackFormat = winston.format(info => {
+  if (info instanceof Error) {
+    return Object.assign({}, info, {
+      stack: info.stack,
+      message: info.message
+    })
+  }
+  return info
+})
 
 const logger = winston.createLogger({
   level: 'debug',
   format: winston.format.combine(
     winston.format.timestamp(),
+    errorStackFormat(),
     winston.format.json(),
   ),
   transports: [
     new winston.transports.File({ filename: path.join(WOWUP_FOLDER, 'wowup-updater.log') }),
+    // new winston.transports.Console(),
   ],
+  exceptionHandlers: [
+    new winston.transports.File({ filename: path.join(WOWUP_FOLDER, 'wowup-updater.log') }),
+    // new winston.transports.Console(),
+  ]
 });
+
+logger.info(`Starting ${version}`);
 
 program
   .version('1.0.0')
@@ -73,8 +92,8 @@ async function processUpdate() {
     deleteFile(program.update);
 
     startWowUp(program.origin);
-  } catch (er) {
-    logger.error(`${er}`);
+  } catch (err) {
+    logger.error(err);
     //Check if we made the backup and revert
     if (backupPath && !fs.existsSync(program.Origin) && fs.existsSync(backupPath)) {
       logger.info("Attempting to rollback changes");
@@ -139,15 +158,21 @@ function startWowUp(path) {
 
 async function killWowUp() {
   logger.info('Killing WowUp');
-  try {
-    await taskKill(['WowUp.exe']);
-  } catch (e) {
-    if (e.exitCode === 128) {
-      return;
-    }
 
-    logger.error(`${e}`);
-    throw e;
+  let ps = new shell({
+    executionPolicy: 'Bypass',
+    noProfile: true
+  });
+
+  try {
+    ps.addCommand('Stop-Process -Name WowUp');
+
+    const output = await ps.invoke();
+    logger.debug(`Kill Output: ${output}`);
+  } catch (err) {
+    logger.error(err);
+  } finally{
+    ps.dispose();
   }
 }
 
