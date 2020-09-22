@@ -7,8 +7,8 @@ const { v4: uuidv4 } = require('uuid');
 const rimraf = require('rimraf');
 const { spawn } = require('child_process');
 const winston = require('winston');
-const shell = require('node-powershell');
 const { version } = require('../package.json');
+const taskKill = require('taskkill');
 
 const WOWUP_FOLDER = path.join(remote.process.env.LOCALAPPDATA, 'WowUp', 'Logs');
 
@@ -158,21 +158,10 @@ function startWowUp(path) {
 
 async function killWowUp() {
   logger.info('Killing WowUp');
-
-  let ps = new shell({
-    executionPolicy: 'Bypass',
-    noProfile: true
-  });
-
   try {
-    ps.addCommand('Stop-Process -Name WowUp');
-
-    const output = await ps.invoke();
-    logger.debug(`Kill Output: ${output}`);
+    await taskKill(['WowUp.exe']);
   } catch (err) {
     logger.error(err);
-  } finally{
-    ps.dispose();
   }
 }
 
