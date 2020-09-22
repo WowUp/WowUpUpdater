@@ -1,6 +1,6 @@
 {
   "name": "wowup-updater",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "WowUp app updater",
   "main": "src/main.js",
   "scripts": {
